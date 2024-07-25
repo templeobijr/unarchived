@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Add Wardrobe Item{% endblock %}
+
+{% block content %}
+    <h2>Add Wardrobe Item</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Item</button>
+    </form>
+{% endblock %}

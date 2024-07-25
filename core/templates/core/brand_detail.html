@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ brand.name }}</title>
+</head>
+<body>
+    <h1>{{ brand.name }}</h1>
+    <p>{{ brand.description }}</p>
+    <img src="{{ brand.logo.url }}" alt="{{ brand.name }} logo">
+    <h2>Products</h2>
+    <ul>
+        {% for product in brand.product_set.all %}
+        <li>
+            <a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Profile</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    <button type="submit">Save Changes</button>
+  </form>
+  {% if user.is_brand %}
+    <h3>Your Brands</h3>
+    <ul>
+      {% for brand in brand_profiles %}
+        <li>{{ brand.name }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

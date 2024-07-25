@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Welcome, {{ user.username }}</h2>
+    <ul>
+        <li><a href="{% url 'profile' %}">Update Profile</a></li>
+        <li><a href="{% url 'add_brand' %}">Add Brand</a></li>
+        <li><a href="{% url 'add_product' %}">Add Product</a></li>
+        <li><a href="{% url 'add_wardrobe_item' %}">Add Wardrobe Item</a></li>
+    </ul>
+    <h3>Your Brands</h3>
+    <ul>
+        {% for brand in brands %}
+            <li>{{ brand.name }} 
+                <a href="{% url 'brand_detail' brand.pk %}">View</a> 
+                <a href="{% url 'edit_brand' brand.pk %}">Edit</a> 
+                <a href="{% url 'delete_brand' brand.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <h3>Your Products</h3>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} 
+                <a href="{% url 'product_detail' product.pk %}">View</a> 
+                <a href="{% url 'edit_product' product.pk %}">Edit</a> 
+                <a href="{% url 'delete_product' product.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <h3>Your Wardrobe Items</h3>
+    <ul>
+        {% for item in wardrobe_items %}
+            <li>{{ item.name }} 
+                <a href="{% url 'edit_wardrobe_item' item.pk %}">Edit</a> 
+                <a href="{% url 'delete_wardrobe_item' item.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <div class="user-profile">
+        {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}">
+        {% else %}
+            <img src="{% static 'images/default_profile_picture.jpg' %}" alt="Default Profile Picture">
+        {% endif %}
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.bio }}</p>
+        <p>Followers: {{ user.followers.count }}</p>
+        <p>Following: {{ user.following.count }}</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div class="wardrobe">
+        <h3>Wardrobe</h3>
+        <a href="{% url 'add_wardrobe_item' %}">Add New Item</a>
+        {% for item in wardrobe_items %}
+            <div class="wardrobe-item">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                <h4>{{ item.name }}</h4>
+                <p>{{ item.description }}</p>
+                <a href="{% url 'edit_wardrobe_item' item.pk %}">Edit</a>
+                <a href="{% url 'delete_wardrobe_item' item.pk %}">Delete</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

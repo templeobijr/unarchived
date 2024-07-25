@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="stories">
+        <h2>Stories</h2>
+        <div class="stories-container">
+            <!-- Example stories content -->
+            <div class="story">
+                <img src="{% static 'images/story1.jpg' %}" alt="Story 1">
+                <p>Story 1</p>
+            </div>
+            <div class="story">
+                <img src="{% static 'images/story2.jpg' %}" alt="Story 2">
+                <p>Story 2</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="spotlight">
+        <h2>Spotlight</h2>
+        <div class="spotlight-container">
+            <!-- Example spotlight content -->
+            <div class="spotlight-item">
+                <img src="{% static 'images/spotlight.jpg' %}" alt="Spotlight">
+                <h3>Spotlight Title</h3>
+                <p>Spotlight description goes here.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="explore-brands">
+        <h2>Explore Brands</h2>
+        <div class="brands-container">
+            {% for brand in brands %}
+                <div class="brand-item">
+                    <img src="{% if brand.logo %}{{ brand.logo.url }}{% else %}{% static 'images/default-logo.png' %}{% endif %}" alt="{{ brand.name }}">
+                    <h3>{{ brand.name }}</h3>
+                    <p>{{ brand.description }}</p>
+                    <a href="{% url 'brand_detail' brand.pk %}">View Brand</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="featured">
+        <h2>Featured</h2>
+        <div class="featured-container">
+            <!-- Example featured content -->
+            {% for brand in brands %}
+                <div class="featured-item">
+                    <img src="{% if brand.logo %}{{ brand.logo.url }}{% else %}{% static 'images/default-logo.png' %}{% endif %}" alt="{{ brand.name }}">
+                    <h3>{{ brand.name }}</h3>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <div class="user-profile">
+        {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}">
+        {% else %}
+            <img src="{% static 'images/default_profile_picture.jpg' %}" alt="Default Profile Picture">
+        {% endif %}
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.bio }}</p>
+        <p>Followers: {{ user.followers.count }}</p>
+        <p>Following: {{ user.following.count }}</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+    </div>
+
+    <div class="brands">
+        <h3>Brands</h3>
+        <a href="{% url 'add_brand' %}">Add New Brand</a>
+        <ul>
+            {% for brand in brand_profiles %}
+                <li>{{ brand.name }} - <a href="{% url 'edit_brand' brand.pk %}">Edit</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
