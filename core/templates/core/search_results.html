@@ -1,0 +1,31 @@
+<!-- core/templates/core/search_results.html -->
+
+{% extends 'core/base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+    <h2>Search Results for "{{ query }}"</h2>
+    
+    <h3>Brands</h3>
+    {% if brand_results %}
+        <ul>
+            {% for brand in brand_results %}
+                <li>{{ brand.name }}: {{ brand.description }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No brands found.</p>
+    {% endif %}
+    
+    <h3>Products</h3>
+    {% if product_results %}
+        <ul>
+            {% for product in product_results %}
+                <li>{{ product.name }}: {{ product.description }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No products found.</p>
+    {% endif %}
+{% endblock %}

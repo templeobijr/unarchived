@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from .models import CustomUser, BrandProfile, Product, WardrobeItem
+from .models import CustomUser, BrandProfile, Product, WardrobeItem, Category, BrandCategory
 from .forms import CustomUserForm, BrandProfileForm, ProductForm, WardrobeItemForm
+from django.db.models import Q
 
 def home(request):
     brands = BrandProfile.objects.all()
@@ -17,6 +18,23 @@ def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'core/product_detail.html', {'product': product})
 
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'core/category_list.html', {'categories': categories})
+
+def category_detail(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    products = category.products.all()
+    return render(request, 'core/category_detail.html', {'category': category, 'products': products})
+
+def brand_category_list(request):
+    categories = BrandCategory.objects.all()
+    return render(request, 'core/brand_category_list.html', {'categories': categories})
+
+def brand_category_detail(request, pk):
+    category = get_object_or_404(BrandCategory, pk=pk)
+    brands = category.brands.all()
+    return render(request, 'core/brand_category_detail.html', {'category': category, 'brands': brands})
 def register(request):
     if request.method == 'POST':
         form = CustomUserForm(request.POST)
@@ -202,3 +220,19 @@ def explore(request):
         'top_brands': top_brands
     }
     return render(request, 'core/explore.html', context)
+
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        brand_results = BrandProfile.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        product_results = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    else:
+        brand_results = BrandProfile.objects.none()
+        product_results = Product.objects.none()
+    
+    context = {
+        'brand_results': brand_results,
+        'product_results': product_results,
+        'query': query,
+    }
+    return render(request, 'core/search_results.html', context)

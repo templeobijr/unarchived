@@ -25,7 +25,8 @@ SECRET_KEY = "django-insecure-r2uw4f7%$v$#5mkq5lgo8$kt6%h+qt=mpr_qs(0%tts$yu7ia8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['unique-unarchived-name-9f1526f9f657.herokuapp.com', 'localhost', '127.0.0.1']
+
 
 # Application definition
 
@@ -76,7 +77,7 @@ WSGI_APPLICATION = "unarchived.wsgi.application"
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL')
+        default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3')
     )
 }
 

@@ -1,25 +1,34 @@
 from django.contrib import admin
-from .models import CustomUser, BrandProfile, Product, WardrobeItem
+from .models import CustomUser, BrandProfile, WardrobeItem, Product, ProductImage
 
-@admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'is_brand')
+    list_display = ('username', 'email', 'is_staff', 'is_active')
     search_fields = ('username', 'email')
-    list_filter = ('is_brand',)
+    list_filter = ('is_staff', 'is_active')
 
-@admin.register(BrandProfile)
+
 class BrandProfileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user')
+    list_display = ('name', 'user', 'created_at')
     search_fields = ('name', 'user__username')
+    list_filter = ('created_at',)
 
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'brand', 'price')
-    search_fields = ('name', 'brand__name')
-    list_filter = ('brand',)
-
-@admin.register(WardrobeItem)
 class WardrobeItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'owner', 'product')
-    search_fields = ('name', 'owner__username', 'product__name')
-    list_filter = ('owner', 'product')
+    list_display = ('name', 'owner', 'created_at')
+    search_fields = ('name', 'owner__username')
+    list_filter = ('created_at',)
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'brand_profile', 'price', 'created_at')
+    search_fields = ('name', 'brand_profile__name')
+    list_filter = ('created_at', 'brand_profile')
+
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('product', 'image', 'created_at')
+    search_fields = ('product__name',)
+    list_filter = ('created_at',)
+
+admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(BrandProfile, BrandProfileAdmin)
+admin.site.register(WardrobeItem, WardrobeItemAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductImage, ProductImageAdmin)

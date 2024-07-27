@@ -1,0 +1,16 @@
+<!-- core/templates/core/brand_category_detail.html -->
+
+{% extends 'core/base.html' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block content %}
+    <h2>{{ category.name }}</h2>
+    <p>{{ category.description }}</p>
+    <h3>Brands</h3>
+    <ul>
+        {% for brand in brands %}
+            <li><a href="{% url 'brand_detail' brand.pk %}">{{ brand.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

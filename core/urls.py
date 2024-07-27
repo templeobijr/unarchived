@@ -6,6 +6,11 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('brand/<int:pk>/', views.brand_detail, name='brand_detail'),
     path('product/<int:pk>/', views.product_detail, name='product_detail'),
+    path('categories/', views.category_list, name='category_list'),
+    path('category/<int:pk>/', views.category_detail, name='category_detail'),
+    path('brand-categories/', views.brand_category_list, name='brand_category_list'),
+    path('brand-category/<int:pk>/', views.brand_category_detail, name='brand_category_detail'),
+    path('category/add/', views.add_category, name='add_category'),
     path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
     path('profile/brand/', views.brand_owner_profile, name='brand_owner_profile'),
@@ -23,4 +28,5 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='core/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='core/logout.html'), name='logout'),
     path('explore/', views.explore, name='explore'),
+    path('search/', views.search, name='search'),
 ]

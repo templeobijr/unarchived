@@ -13,7 +13,14 @@
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'profile' %}">Profile</a></li>
+                <form action="{% url 'search' %}" method="get">
+                    <input type="text" name="q" placeholder="Search...">
+                    <button type="submit">Search</button>
+                </form>
+                <li><a href="{% url 'category' %}">Category</a></li>
+                <li><a href="{% url 'explore' %}">Explore</a></li>
                 <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'settings' %}">Settings</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
@@ -30,5 +37,6 @@
     <footer>
         <p>&copy; 2024 Unarchived</p>
     </footer>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
