@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .models import CustomUser, BrandProfile, Product, WardrobeItem, Category, BrandCategory
-from .forms import CustomUserForm, BrandProfileForm, ProductForm, WardrobeItemForm
+from .forms import CustomUserCreationForm, CustomUserForm, BrandProfileForm, ProductForm, WardrobeItemForm
 from django.db.models import Q
 
 def home(request):
@@ -37,15 +37,13 @@ def brand_category_detail(request, pk):
     return render(request, 'core/brand_category_detail.html', {'category': category, 'brands': brands})
 def register(request):
     if request.method == 'POST':
-        form = CustomUserForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
+            user = form.save()
             login(request, user)
             return redirect('home')
     else:
-        form = CustomUserForm()
+        form = CustomUserCreationForm()
     return render(request, 'core/register.html', {'form': form})
 
 def login_view(request):
@@ -58,10 +56,14 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 return redirect('home')  # Redirect to home or any other page
-        else:
-            form = AuthenticationForm()
+    else:
+        form = AuthenticationForm()
     return render(request, 'core/login.html', {'form': form})
 
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('home')
 @login_required
 def profile(request):
     user = request.user
@@ -92,12 +94,12 @@ def brand_owner_profile(request):
 def normal_user_profile(request):
     user = request.user
     if request.method == 'POST':
-        user_form = CustomUserForm(request.POST, request.FILES, instance=user)
+        user_form = CustomUserCreationForm(request.POST, request.FILES, instance=user)
         if user_form.is_valid():
             user_form.save()
             return redirect('normal_user_profile')
     else:
-        user_form = CustomUserForm(instance=user)
+        user_form = CustomUserCreationForm(instance=user)
     wardrobe_items = WardrobeItem.objects.filter(owner=user)
     return render(request, 'core/normal_user_profile.html', {'user_form': user_form, 'wardrobe_items': wardrobe_items})
 
@@ -236,3 +238,23 @@ def search(request):
         'query': query,
     }
     return render(request, 'core/search_results.html', context)
+
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('category_list')
+    else:
+        form = CategoryForm()
+    return render(request, 'core/add_category.html', {'form': form})
+def settings(request):
+    user = request.user
+    if request.method == 'POST':
+        form = CustomUserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('settings')
+    else:
+        form = CustomUserForm(instance=user)
+    return render(request, 'core/settings.html', {'form': form})

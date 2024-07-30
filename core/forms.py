@@ -2,20 +2,32 @@ from django import forms # type: ignore
 from .models import CustomUser, BrandProfile, Product, WardrobeItem, Category, BrandCategory
 from django.contrib.auth.forms import UserCreationForm
 
-class CustomUserForm(UserCreationForm):
+class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ['username', 'password', 'email', 'is_brand', 'profile_picture', 'bio']
+        fields = ['username', 'password1', 'password2', 'email', 'is_brand', 'profile_picture', 'bio']  # Include additional fields
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data.get('email')
+        if commit:
+            user.save()
+        return user
+    
+class CustomUserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'is_brand', 'profile_picture', 'bio']
+    
 class BrandProfileForm(forms.ModelForm):
     class Meta:
         model = BrandProfile
-        fields = ['name', 'description', 'logo', Category]
+        fields = ['name', 'description', 'logo', 'category']
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'image', 'price', 'description', Category]
+        fields = ['name', 'image', 'price', 'description']
 
 class WardrobeItemForm(forms.ModelForm):
     class Meta:

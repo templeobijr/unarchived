@@ -29,4 +29,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='core/logout.html'), name='logout'),
     path('explore/', views.explore, name='explore'),
     path('search/', views.search, name='search'),
+    path('category/add/', views.add_category, name='add_category'),
+     path('settings/', views.settings, name='settings'),
 ]

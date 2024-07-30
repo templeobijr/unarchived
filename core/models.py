@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
+
 class CustomUser(AbstractUser):
     is_brand = models.BooleanField(default=False)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
@@ -42,7 +43,7 @@ class BrandCategory(models.Model):
 class BrandProfile(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='brands')
     name = models.CharField(max_length=100)
-    category = models.ForeignKey(BrandCategory, on_delete=models.SET_NULL, null=True, related_name='brands')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='brands')
     logo = models.ImageField(upload_to='brand_logos/')
     description = models.TextField()
     created_at = models.DateTimeField(default=timezone.now, editable=False)
@@ -56,18 +57,18 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
-    image = models.ImageField(upload_to='product_images/')
+    image = models.ImageField(upload_to='product_images/', null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 class WardrobeItem(models.Model):
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='wardrobe_items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wardrobe_items')
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='wardrobe_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='wardrobe_items/')
-
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return f'{self.product.name} - {self.owner.username}'
 
